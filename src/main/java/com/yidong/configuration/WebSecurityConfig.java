@@ -1,4 +1,7 @@
 package com.yidong.configuration;
+/**
+ * springsecurity配置类
+ */
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,6 +41,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new JwtAuthenticationTokenFilter();
     }
 
+    /**
+     * AuthenticationManager用于鉴定认证
+     * @return AuthenticationManager
+     * @throws Exception
+     */
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {

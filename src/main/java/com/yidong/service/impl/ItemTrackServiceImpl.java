@@ -21,22 +21,24 @@ public class ItemTrackServiceImpl implements ItemTrackService {
 
     @Autowired
     private ItemTrackMapper itemTrackMapper;
+    @Autowired
     private DepartmentMapper departmentMapper;
+    @Autowired
+    private UserMapper userMapper;
     /**
      *
      * @param itemTrack
      * @return 如果添加操作成功返回1，否则0
      */
     @Override
-    public int AddItemtrack(ItemTrack itemTrack) {
+    public int addItemtrack(ItemTrack itemTrack) {
         itemTrack.setId(UUIDUtils.getUUID());
         String id=itemTrack.getUserId();
-        UserService userService=new UserServiceImpl();
-        User user=userService.getUser(id);
+        User user=userMapper.getUser(id);
         itemTrack.setName(user.getName());
         itemTrack.setTelephone(user.getTelephone());
         itemTrack.setEmail(user.getEmail());
-        itemTrack.setDepartment(getDepartmentName(user.getDepartment()));
+        itemTrack.setDepartment(departmentMapper.select(user.getDepartment()));
         itemTrack.setApplyYear(Time.getTime());
         return itemTrackMapper.insert(itemTrack);
     }
@@ -45,7 +47,7 @@ public class ItemTrackServiceImpl implements ItemTrackService {
       通过user_id（用户的ID）来获取跟踪表的信息
      */
     @Override
-    public List<ItemTrack> SelectByUserId(String user_id) {
+    public List<ItemTrack> selectByUserId(String user_id) {
 
         return itemTrackMapper.selectByUserId(user_id);
     }
@@ -54,7 +56,7 @@ public class ItemTrackServiceImpl implements ItemTrackService {
        通过跟踪表的ID来检索获取表格信息
      */
     @Override
-    public ItemTrack SelectById(String id) {
+    public ItemTrack selectById(String id) {
 
         return itemTrackMapper.selectById(id);
     }
@@ -63,16 +65,24 @@ public class ItemTrackServiceImpl implements ItemTrackService {
       更新ID所对应的跟踪表的信息
      */
     @Override
-    public int UpdateById(ItemTrack itemTrack) {
+    public int updateById(ItemTrack itemTrack) {
 
         return itemTrackMapper.updateById(itemTrack);
     }
 
-    // 通过部门id获取部门名字
-    public String getDepartmentName(String id) {
-        HashMap<String, String> hashmap =departmentMapper.select();
-        String val = (String) hashmap.get(id);
-        return val;
+    /**
+     * 根据提交的申请领域判断查找今年已经申请过该领域
+     * @param apply_field
+     * @return
+     */
+    @Override
+    public Boolean selectByApplyFiled(String apply_field) {
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("apply_filed",apply_field);
+        map.put("apply_year",Time.getTime());
+        if(itemTrackMapper.selectByApplyField(map)==0)return true;
+        else return false;
     }
+
 
 }

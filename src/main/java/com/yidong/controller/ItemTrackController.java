@@ -1,5 +1,7 @@
 package com.yidong.controller;
-
+/**
+ * 用于项目跟踪表操作的controller
+ */
 
 import com.yidong.model.ItemTrack;
 import com.yidong.service.ItemTrackService;
@@ -12,9 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
-
 @RestController
+
 public class ItemTrackController {
     /**
      * 自动注入itemTrackService
@@ -33,32 +34,49 @@ public class ItemTrackController {
      * @return 添加ItemTrack，如果成功则返回1，不成功会返回状态码404
      */
     @RequestMapping("/addItemTrack")
-    public ResponseEntity<Integer> AddItemTrack(@RequestBody ItemTrack itemTrack){
-        int A=itemTrackService.AddItemtrack(itemTrack);
+    public ResponseEntity addItemTrack(@RequestBody ItemTrack itemTrack){
+        int A=itemTrackService.addItemtrack(itemTrack);
         if(A==0){
-            return new ResponseEntity<Integer>(A,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<Integer>(A,HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /*
      *  通过user_id查找到对应的所有跟踪表
      */
     @RequestMapping("/selectByUserId")
-    public List<ItemTrack> SelectByUserId(@RequestParam String user_id){
-        return itemTrackService.SelectByUserId(user_id);
+    public List<ItemTrack> selectByUserId(@RequestParam String user_id){
+        return itemTrackService.selectByUserId(user_id);
     }
 
+    /**
+     * 根据id查找对应的itemTrack
+     * @param id
+     * @return
+     */
     @RequestMapping("/selectById")
-    public ItemTrack SelectById(@RequestParam String id){
-
-        return  itemTrackService.SelectById(id);
+    public ItemTrack selectById(@RequestParam String id){
+        return  itemTrackService.selectById(id);
     }
 
+    /**
+     * 根据传入的ItemTrack对象修改itemTrack
+     * @param itemTrack
+     * @return
+     */
     @RequestMapping("/updateById")
-    public int UpdateById(@RequestBody ItemTrack itemTrack){
-        int a =itemTrackService.UpdateById(itemTrack);
-        System.out.print(a+"111111");
-        return a;
+    public int updateById(@RequestBody ItemTrack itemTrack){
+        return itemTrackService.updateById(itemTrack);
+    }
+
+    /**
+     * 传入申请领域判断是否重复
+     * @param apply_filed
+     * @return 如果申请领域不重复则返回true，否则返回false
+     */
+    @RequestMapping("/checkApplyFiled")
+    public Boolean checkApplyFiled(@RequestParam String apply_filed){
+        return itemTrackService.selectByApplyFiled(apply_filed);
     }
 }

@@ -5,16 +5,15 @@ package com.yidong.mapper;
 
 import com.yidong.model.User;
 
-import java.util.Map;
-
 public interface UserMapper {
 
     /**
-     * 根据账号密码找用户
-     * @param map
+     * 根据账号找用户
+     * @param account
      * @return User
      */
-    User selectByAccountPassword(Map<String,String> map);
     User selectByAccount(String account);
+
+    User getUser(String id);
 
 }

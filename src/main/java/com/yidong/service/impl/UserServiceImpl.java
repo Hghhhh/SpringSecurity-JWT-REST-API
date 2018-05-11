@@ -3,6 +3,7 @@ package com.yidong.service.impl;
 
 import com.yidong.mapper.UserMapper;
 import com.yidong.model.JwtUser;
+import com.yidong.model.User;
 import com.yidong.service.UserService;
 import com.yidong.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -46,7 +50,7 @@ public class UserServiceImpl implements UserService {
      * @return 一个jwt的token
      */
     @Override
-    public String login(String account, String password) {
+    public Map<String,String> login(String account, String password) {
         //这一部分生成根据账号密码authentication放在SecurityContextHolder上下文中，用来验证密码
         UsernamePasswordAuthenticationToken unAuthentication = new UsernamePasswordAuthenticationToken(account, password);//还未验证的认证
         final Authentication authentication = authenticationManager.authenticate(unAuthentication);//验证认证
@@ -56,7 +60,12 @@ public class UserServiceImpl implements UserService {
         final JwtUser userDetails =(JwtUser)userDetailsService.loadUserByUsername(account);
 
         final String token = jwtTokenUtil.generateToken(userDetails);
-        return token;
+        //返回用户的信息
+        Map<String,String> userMap  = new HashMap<String ,String>();
+        userMap.put("id",userDetails.getId());
+        userMap.put("name",userDetails.getName());
+        userMap.put("token",token);
+        return userMap;
     }
 
     /**
@@ -74,4 +83,6 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+
 }

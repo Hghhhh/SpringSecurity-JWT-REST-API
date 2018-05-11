@@ -16,25 +16,19 @@ public class JwtUser implements UserDetails {
     private String id;
     private String account;
     private String password;
-    private String department;
     private String name;
 
 
-    public JwtUser(String id,String account,String password,String department,String name){
+    public JwtUser(String id,String account,String password,String name){
         this.id = id;
         this.name = name;
         this.account = account;
-        this.department = department;
         this.password = password;
     }
 
 
     public String getId() {
         return id;
-    }
-
-    public String getDepartment() {
-        return department;
     }
 
     public String getName() {

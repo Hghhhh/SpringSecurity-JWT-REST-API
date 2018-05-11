@@ -11,6 +11,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -28,11 +29,11 @@ public class UserController {
      * @throws AuthenticationException
      */
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public ResponseEntity<String> createAuthenticationToken(
+    public ResponseEntity<Map<String,String>> createAuthenticationToken(
             @RequestParam String account, @RequestParam String password) throws AuthenticationException{
-        final String token = userService.login(account, password);
+        final Map<String,String> userMap = userService.login(account, password);
         // Return the token
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(userMap);
     }
 
     /**

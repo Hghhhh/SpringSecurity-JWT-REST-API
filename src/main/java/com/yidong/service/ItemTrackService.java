@@ -5,8 +5,9 @@ import com.yidong.model.ItemTrack;
 import java.util.List;
 
 public interface ItemTrackService {
-    public int AddItemtrack(ItemTrack itemTrack);
-    public List<ItemTrack> SelectByUserId(String user_id);
-    public ItemTrack SelectById(String id);
-    public int UpdateById(ItemTrack itemTrack);
+    public int addItemtrack(ItemTrack itemTrack);
+    public List<ItemTrack> selectByUserId(String user_id);
+    public ItemTrack selectById(String id);
+    public int updateById(ItemTrack itemTrack);
+    public Boolean selectByApplyFiled(String apply_field);
 }
