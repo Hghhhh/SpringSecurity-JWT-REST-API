@@ -3,6 +3,7 @@ package com.yidong.configuration;
  * springsecurity配置类
  */
 
+import com.yidong.util.MyPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -52,14 +53,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    @Bean
+    public MyPasswordEncoder myPasswordEncoderBean()throws Exception {
+        return new MyPasswordEncoder();
+    }
+
     @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
-                .userDetailsService(this.userDetailsService).passwordEncoder(NoOpPasswordEncoder.getInstance());
+                .userDetailsService(this.userDetailsService)
         //这里略坑，SpringSecurity默认必须得要有一个passwordEncoder，不然报错，
         // 同时，如果你有且仅有一个passwordEncoder的bean，即使你不设置它，springsecurity也会帮你自动设置它为passwordEncoder
         //测试的时候用一个什么都不做的NoOpPasswordEncoder
-          //     .passwordEncoder(passwordEncoder());
+               .passwordEncoder(myPasswordEncoderBean());
     }
 
     @Override
